@@ -50,8 +50,8 @@ public class LogisticRepository {
     }
 
     public List<Airport> searchAirport(String search) {
-        return flights.stream().filter(fl -> fl.getFrom().getAirport().toLowerCase().equals(search) ||
-                fl.getFrom().getCity().toLowerCase().equals(search) ||
-                fl.getFrom().getCountry().toLowerCase().equals(search)).map(Flight::getFrom).toList();
+        return flights.stream().filter(fl -> fl.getFrom().getAirport().toLowerCase().contains(search) ||
+                fl.getFrom().getCity().toLowerCase().contains(search) ||
+                fl.getFrom().getCountry().toLowerCase().contains(search)).map(Flight::getFrom).toList();
     }
 }
