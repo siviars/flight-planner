@@ -1,8 +1,17 @@
 package io.codelex.flightplanner.Objects;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 public class Airport {
+    @NotBlank
+    @NotNull
     private String airport;
+    @NotBlank
+    @NotNull
     private String city;
+    @NotBlank
+    @NotNull
     private String country;
 
     public Airport(String country, String city, String airport) {

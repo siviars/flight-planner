@@ -35,13 +35,13 @@ public class LogisticRepository {
     }
 
     public void deleteFlight(Long id) {
-        flights.remove(flights.stream().filter(myid -> id.equals(myid.getId())).findAny().orElse(null));
+        flights.removeIf(fly -> fly.getId().equals(id));
     }
 
     public SearchItems searchFlight(FlightsRequest flightsRequest) {
         List<Flight> items = flights.stream().filter(fl -> fl.getFrom().getAirport().equals(flightsRequest.getFrom()) &&
                 fl.getTo().getAirport().equals(flightsRequest.getTo()) &&
-                fl.getDepartureTime().substring(0, 10).equals(flightsRequest.getDepartureDate())).toList();
+                fl.getDepartureTime().toString().substring(0, 10).equals(flightsRequest.getDepartureDate())).toList();
         return new SearchItems(items, 0, items.size());
     }
 

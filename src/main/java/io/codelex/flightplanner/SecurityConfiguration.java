@@ -11,12 +11,12 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf().disable() //disables CSRF protection
-                .authorizeRequests() //tells that path matchers will start
-                .antMatchers("/api/**", "/testing-api/**").anonymous() //everything without authentication
-                .anyRequest().authenticated() //everything else with authentication
+                .csrf().disable()
+                .authorizeRequests()
+                .antMatchers("/api/**", "/testing-api/**").anonymous()
+                .anyRequest().authenticated()
                 .and()
-                .httpBasic(); //authentication type
+                .httpBasic();
 
         return http.build();
     }

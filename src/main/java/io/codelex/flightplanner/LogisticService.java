@@ -21,57 +21,19 @@ public class LogisticService {
     }
 
     public synchronized Flight addFlight(Flight flight) {
-//--------------------------Check null----------------------------------------------------------------
-        if (flight.getCarrier() != null && flight.getCarrier() != "" &&
-                flight.getDepartureTime() != (null) && !flight.getDepartureTime().equals("") &&
-                flight.getArrivalTime() != (null) && !flight.getArrivalTime().equals("") &&
-                flight.getFrom() != (null) &&
-                flight.getTo() != (null)) {
-            if (flight.getFrom().getCity() != (null) && !flight.getFrom().getCity().equals("") &&
-                    flight.getFrom().getCountry() != (null) && !flight.getFrom().getCountry().equals("") &&
-                    flight.getFrom().getAirport() != (null) && !flight.getFrom().getAirport().equals("") &&
-                    flight.getTo().getCity() != (null) && !flight.getTo().getCity().equals("") &&
-                    flight.getTo().getCountry() != (null) && !flight.getTo().getCountry().equals("") &&
-                    flight.getTo().getAirport() != (null) && !flight.getTo().getAirport().equals("")) {
-                //--------------------Check same flight------------------------------
-                if (logisticRepository.flights.stream().anyMatch(fl ->
-                        fl.getFrom().getAirport().equals(flight.getFrom().getAirport()) &&
-                                fl.getFrom().getCountry().equals(flight.getFrom().getCountry()) &&
-                                fl.getFrom().getCity().equals(flight.getFrom().getCity()) &&
-                                fl.getTo().getAirport().equals(flight.getTo().getAirport()) &&
-                                fl.getTo().getCountry().equals(flight.getTo().getCountry()) &&
-                                fl.getTo().getCity().equals(flight.getTo().getCity()) &&
-                                fl.getDepartureTime().equals(flight.getDepartureTime()) &&
-                                fl.getArrivalTime().equals(flight.getArrivalTime()) &&
-                                fl.getCarrier().equals(flight.getCarrier()))) {
-                    throw new ResponseStatusException(HttpStatus.CONFLICT);
-                } else {
-                    //----------------Check same airports--------------------------
-                    if (flight.getTo().getAirport().toUpperCase().trim().equals(flight.getFrom().getAirport().toUpperCase().trim()) &&
-                            flight.getFrom().getCity().toUpperCase().trim().equals(flight.getTo().getCity().toUpperCase().trim()) &&
-                            flight.getFrom().getCountry().toUpperCase().trim().equals(flight.getTo().getCountry().toUpperCase().trim())) {
-                        throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-                    } else {
-                        //---------------------Check time--------------------------
-                        if (LocalDateTime.parse(flight.getDepartureTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
-                                .isAfter(LocalDateTime.parse(flight.getArrivalTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))) ||
-                                flight.getDepartureTime().equals(flight.getArrivalTime())) {
-                            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-                        } else {
-                            return logisticRepository.addFlight(flight);
-                        }
-                        //------------------End check time-------------------------
-                    }
-                    //-------------------End check same airports-------------------
-                }
-                //-------------------End check same flight--------------------------
-            } else {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-            }
+        if (checkSameFlight(flight)) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT);
         } else {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            if (checkSameAirport(flight)) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            } else {
+                if (checkTime(flight)) {
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+                } else {
+                    return logisticRepository.addFlight(flight);
+                }
+            }
         }
-//--------------------------End check null-------------------------------------------
     }
 
     public void clearFlights() {
@@ -117,5 +79,30 @@ public class LogisticService {
 
     public List<Flight> getFlight() {
         return logisticRepository.getFlight();
+    }
+
+    public boolean checkSameFlight(Flight flight) {
+        return logisticRepository.flights.stream().anyMatch(fl ->
+                fl.getFrom().getAirport().equals(flight.getFrom().getAirport()) &&
+                        fl.getFrom().getCountry().equals(flight.getFrom().getCountry()) &&
+                        fl.getFrom().getCity().equals(flight.getFrom().getCity()) &&
+                        fl.getTo().getAirport().equals(flight.getTo().getAirport()) &&
+                        fl.getTo().getCountry().equals(flight.getTo().getCountry()) &&
+                        fl.getTo().getCity().equals(flight.getTo().getCity()) &&
+                        fl.getDepartureTime().equals(flight.getDepartureTime()) &&
+                        fl.getArrivalTime().equals(flight.getArrivalTime()) &&
+                        fl.getCarrier().equals(flight.getCarrier()));
+    }
+
+    public boolean checkSameAirport(Flight flight) {
+        return (flight.getTo().getAirport().toUpperCase().trim().equals(flight.getFrom().getAirport().toUpperCase().trim()) &&
+                flight.getFrom().getCity().toUpperCase().trim().equals(flight.getTo().getCity().toUpperCase().trim()) &&
+                flight.getFrom().getCountry().toUpperCase().trim().equals(flight.getTo().getCountry().toUpperCase().trim()));
+    }
+
+    public boolean checkTime(Flight flight) {
+        return (LocalDateTime.parse(flight.getDepartureTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
+                .isAfter(LocalDateTime.parse(flight.getArrivalTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))) ||
+                flight.getDepartureTime().equals(flight.getArrivalTime()));
     }
 }

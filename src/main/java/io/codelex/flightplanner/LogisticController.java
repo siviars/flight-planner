@@ -5,11 +5,14 @@ import io.codelex.flightplanner.Objects.Flight;
 import io.codelex.flightplanner.Objects.FlightsRequest;
 import io.codelex.flightplanner.Objects.SearchItems;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
+@Validated
 public class LogisticController {
     private LogisticService logisticService;
 
@@ -25,7 +28,7 @@ public class LogisticController {
 
     @PutMapping("/admin-api/flights")
     @ResponseStatus(HttpStatus.CREATED)
-    public Flight addFlight(@RequestBody Flight flight) {
+    public Flight addFlight(@RequestBody @Valid Flight flight) {
         return logisticService.addFlight(flight);
     }
 
