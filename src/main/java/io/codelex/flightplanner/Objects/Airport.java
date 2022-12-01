@@ -1,18 +1,30 @@
 package io.codelex.flightplanner.Objects;
 
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+@Entity
+@Table(name = "AIRPORT")
 public class Airport {
+
+
     @NotBlank
     @NotNull
-    private String airport;
-    @NotBlank
-    @NotNull
-    private String city;
-    @NotBlank
-    @NotNull
+    @Column(name = "country")
     private String country;
+    @NotBlank
+    @NotNull
+    @Column(name = "city")
+    private String city;
+    @Id
+    @NotBlank
+    @NotNull
+    @Column(name = "airport")
+    private String airport;
+
+    public Airport() {
+    }
 
     public Airport(String country, String city, String airport) {
         this.country = country;

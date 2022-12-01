@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class LogisticRepository {
-    private Long idNum = 1L;
+public class LogisticRepositoryInMemory {
+    private Integer idNum = 1;
     List<Flight> flights = new ArrayList<>();
 
     public Flight addFlight(Flight flight) {
@@ -23,10 +23,10 @@ public class LogisticRepository {
 
     public void clearFlights() {
         flights.clear();
-        idNum = 1L;
+        idNum = 1;
     }
 
-    public Flight fetchFlight(Long id) {
+    public Flight fetchFlight(Integer id) {
         return flights.stream().filter(myid -> id.equals(myid.getId())).findAny().orElse(null);
     }
 
@@ -34,7 +34,7 @@ public class LogisticRepository {
         return flights;
     }
 
-    public void deleteFlight(Long id) {
+    public void deleteFlight(Integer id) {
         flights.removeIf(fly -> fly.getId().equals(id));
     }
 
@@ -45,7 +45,7 @@ public class LogisticRepository {
         return new SearchItems(items, 0, items.size());
     }
 
-    public Flight findFlightById(Long id) {
+    public Flight findFlightById(Integer id) {
         return flights.stream().filter(myid -> id.equals(myid.getId())).findAny().orElse(null);
     }
 
