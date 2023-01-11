@@ -8,7 +8,6 @@ import javax.validation.constraints.NotNull;
 @Table(name = "AIRPORT")
 public class Airport {
 
-
     @NotBlank
     @NotNull
     @Column(name = "country")

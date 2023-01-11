@@ -20,7 +20,6 @@ public class LogisticController {
     @PostMapping("/testing-api/clear")
     @ResponseStatus(HttpStatus.OK)
     public void clearFlights() {
-        System.out.println("Clear1");
         logisticService.clearFlights();
     }
 

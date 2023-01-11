@@ -74,9 +74,7 @@ public class LogisticServiceFromDB implements LogisticService {
             if (flightsRequest.getFrom().equals(flightsRequest.getTo())) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
             } else {
-                List<Flight> items = logisticRepositoryFlight.findAll().stream().filter(fl -> fl.getFrom().getAirport().equals(flightsRequest.getFrom()) &&
-                        fl.getTo().getAirport().equals(flightsRequest.getTo()) &&
-                        fl.getDepartureTime().toString().substring(0, 10).equals(flightsRequest.getDepartureDate())).toList();
+                List<Flight> items = logisticRepositoryFlight.searchFlight(flightsRequest.getFrom(), flightsRequest.getTo(), flightsRequest.getDepartureDate());
                 return new SearchItems(items, 0, items.size());
             }
         } else {
@@ -96,9 +94,7 @@ public class LogisticServiceFromDB implements LogisticService {
 
     @Override
     public List<Airport> searchAirports(String search) {
-        return logisticRepositoryFlight.findAll().stream().filter(fl -> fl.getFrom().getAirport().toLowerCase().contains(search.trim().toLowerCase()) ||
-                fl.getFrom().getCity().toLowerCase().contains(search.trim().toLowerCase()) ||
-                fl.getFrom().getCountry().toLowerCase().contains(search.trim().toLowerCase())).map(Flight::getFrom).toList();
+        return logisticRepositoryAirport.searchAirports(search.trim().toLowerCase());
     }
 
     public boolean checkSameFlight(Flight flight) {

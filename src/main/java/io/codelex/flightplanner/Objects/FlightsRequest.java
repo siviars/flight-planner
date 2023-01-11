@@ -1,15 +1,18 @@
 package io.codelex.flightplanner.Objects;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 public class FlightsRequest {
 
     private String from;
     private String to;
-    private String departureDate;
+    private LocalDateTime departureDate;
 
     public FlightsRequest(String from, String to, String departureDate) {
         this.from = from;
         this.to = to;
-        this.departureDate = departureDate;
+        this.departureDate = LocalDateTime.parse(departureDate + " 00:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
     }
 
     public String getFrom() {
@@ -28,11 +31,11 @@ public class FlightsRequest {
         this.to = to;
     }
 
-    public String getDepartureDate() {
+    public LocalDateTime getDepartureDate() {
         return departureDate;
     }
 
-    public void setDepartureDate(String departureDate) {
+    public void setDepartureDate(LocalDateTime departureDate) {
         this.departureDate = departureDate;
     }
 
