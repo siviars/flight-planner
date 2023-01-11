@@ -1,9 +1,6 @@
 package io.codelex.flightplanner;
 
-import io.codelex.flightplanner.Objects.Airport;
-import io.codelex.flightplanner.Objects.Flight;
-import io.codelex.flightplanner.Objects.FlightsRequest;
-import io.codelex.flightplanner.Objects.SearchItems;
+import io.codelex.flightplanner.Objects.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -38,12 +35,12 @@ public class LogisticController {
     }
 
     @GetMapping("/admin-api/flights/{id}")
-    public Flight fetchFlight(@PathVariable("id") Long id) {
+    public Flight fetchFlight(@PathVariable("id") Integer id) {
         return logisticService.fetchFlight(id);
     }
 
     @DeleteMapping("/admin-api/flights/{id}")
-    public void deleteFlight(@PathVariable("id") Long id) {
+    public void deleteFlight(@PathVariable("id") Integer id) {
         logisticService.deleteFlight(id);
     }
 
@@ -53,7 +50,7 @@ public class LogisticController {
     }
 
     @GetMapping("/api/flights/{id}")
-    public Flight findFlightById(@PathVariable("id") Long id) {
+    public Flight findFlightById(@PathVariable("id") Integer id) {
         return logisticService.findFlightById(id);
     }
 

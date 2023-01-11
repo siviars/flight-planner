@@ -1,31 +1,45 @@
 package io.codelex.flightplanner.Objects;
 
+import javax.persistence.*;
+
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+@Entity
+@Table(name = "FLIGHT")
 public class Flight {
-
-    private Long id;
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Integer id;
     @Valid
     @NotNull
+    @ManyToOne
+    @JoinColumn(name = "airport_from")
     private Airport from;
     @Valid
     @NotNull
+    @ManyToOne
+    @JoinColumn(name = "airport_to")
     private Airport to;
     @NotBlank
     @NotNull
+    @Column(name = "carrier")
     private String carrier;
     @NotNull
+    @Column(name = "departureTime")
     private LocalDateTime departureTime;
     @NotNull
+    @Column(name = "arrivalTime")
     private LocalDateTime arrivalTime;
 
-    public Flight(Long id, Airport from, Airport to, String carrier, String departureTime, String arrivalTime) {
-        this.id = id;
+    public Flight() {
+    }
+
+    public Flight(Integer id, Airport from, Airport to, String carrier, String departureTime, String arrivalTime) {
         this.from = from;
         this.to = to;
         this.carrier = carrier;
@@ -33,12 +47,11 @@ public class Flight {
         this.arrivalTime = LocalDateTime.parse(arrivalTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
     }
 
-
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -89,8 +102,9 @@ public class Flight {
                 ", from=" + from +
                 ", to=" + to +
                 ", carrier='" + carrier + '\'' +
-                ", departureTime='" + departureTime + '\'' +
-                ", arrivalTime='" + arrivalTime + '\'' +
+                ", departureTime='" + departureTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")) + '\'' +
+                ", arrivalTime='" + arrivalTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")) + '\'' +
                 '}';
     }
+
 }
